@@ -1,8 +1,6 @@
-﻿using LHU_MaSV_NguyenVanTi.Api.Database;
-using LHU_MaSV_NguyenVanTi.Api.Database.Entities;
-using LHU_MaSV_NguyenVanTi.Api.Dto;
+﻿using LHU_MaSV_NguyenVanTi.Api.Dto;
+using LHU_MaSV_NguyenVanTi.Api.IServices;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace LHU_MaSV_NguyenVanTi.Api.Controllers
 {
@@ -10,26 +8,17 @@ namespace LHU_MaSV_NguyenVanTi.Api.Controllers
     [ApiController]
     public class MonHocController : ControllerBase
     {
-        DatabaseContext db;
+        IMonHocService monHocService;
 
-        public MonHocController(DatabaseContext context)
+        public MonHocController(IMonHocService monHocService)
         {
-            db = context;
+            this.monHocService = monHocService;
         }
 
         [HttpGet("get-all")]
         public async Task<ActionResult<List<MonHocDto>>> GetAll()
         {
-            List<MonHocDto> danhSachMonHoc = await db.MonHoc
-                .Select(m => new MonHocDto()
-                {
-                    MonHocId = m.MonHocId,
-                    MaMon = m.MaMon,
-                    TenMon = m.TenMon,
-                    SoTinChi = m.SoTinChi,
-                    SoTietLyThuyet = m.SoTietLyThuyet
-                })
-                .ToListAsync();
+            var danhSachMonHoc = await monHocService.GetAllAsync();
 
             return Ok(danhSachMonHoc);
         }
@@ -37,17 +26,9 @@ namespace LHU_MaSV_NguyenVanTi.Api.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> Add(MonHocAddDto req)
         {
-            MonHocEntity newMonHoc = new MonHocEntity()
-            {
-                MaMon = req.MaMon,
-                TenMon = req.TenMon,
-                SoTinChi = req.SoTinChi,
-                SoTietLyThuyet = req.SoTietLyThuyet
-            };
+            bool isSuccess = await monHocService.AddAsync(req);
 
-            await db.AddAsync(newMonHoc);
-
-            await db.SaveChangesAsync();
+            if (isSuccess == false) return BadRequest();
 
             return Ok();
         }
@@ -55,21 +36,9 @@ namespace LHU_MaSV_NguyenVanTi.Api.Controllers
         [HttpPut("edit")]
         public async Task<IActionResult> Edit(MonHocEditDto req)
         {
-            var monHoc = await db.MonHoc
-                .Where(m => m.MonHocId == req.MonHocId)
-                .FirstOrDefaultAsync();
+            bool isSuccess = await monHocService.EditAsync(req);
 
-            if (monHoc == null)
-            {
-                return NotFound();
-            }
-
-            monHoc.MaMon = req.MaMon;
-            monHoc.TenMon = req.TenMon;
-            monHoc.SoTinChi = req.SoTinChi;
-            monHoc.SoTietLyThuyet = req.SoTietLyThuyet;
-
-            await db.SaveChangesAsync();
+            if (isSuccess == false) return BadRequest();
 
             return Ok();
         }
@@ -77,18 +46,9 @@ namespace LHU_MaSV_NguyenVanTi.Api.Controllers
         [HttpDelete("delete")]
         public async Task<IActionResult> Delete(int monHocId)
         {
-            var monHoc = await db.MonHoc
-                .Where(m => m.MonHocId == monHocId)
-                .FirstOrDefaultAsync();
+            bool isSuccess = await monHocService.DeleteAsync(monHocId);
 
-            if (monHoc == null)
-            {
-                return NotFound();
-            }
-
-            db.MonHoc.Remove(monHoc);
-
-            await db.SaveChangesAsync();
+            if (!isSuccess) return BadRequest();
 
             return Ok();
         }
