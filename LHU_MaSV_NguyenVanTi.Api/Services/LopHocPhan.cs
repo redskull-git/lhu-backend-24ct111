@@ -58,7 +58,9 @@ namespace LHU_MaSV_NguyenVanTi.Api.Services
                 MaLopHP = req.MaLopHP,
                 HocKy = req.HocKy,
                 NamHoc = req.NamHoc,
-                SiSoToiDa = req.SiSoToiDa
+                SiSoToiDa = req.SiSoToiDa,
+                NgayBatDau = req.NgayBatDau,
+                NgayKetThuc = req.NgayKetThuc
             };
 
             await db.AddAsync(newLopHocPhan);
@@ -102,6 +104,8 @@ namespace LHU_MaSV_NguyenVanTi.Api.Services
             lopHocPhan.HocKy = req.HocKy;
             lopHocPhan.NamHoc = req.NamHoc;
             lopHocPhan.SiSoToiDa = req.SiSoToiDa;
+            lopHocPhan.NgayBatDau = req.NgayBatDau;
+            lopHocPhan.NgayKetThuc = req.NgayKetThuc;
 
             await db.SaveChangesAsync();
 
