@@ -18,6 +18,8 @@ namespace LHU_MaSV_NguyenVanTi.Api.Database
 
         public DbSet<DangKyEntity> DangKies => Set<DangKyEntity>();
 
+        public DbSet<NguoiDungEntity> NguoiDungs => Set<NguoiDungEntity>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -25,6 +27,7 @@ namespace LHU_MaSV_NguyenVanTi.Api.Database
             // Cấu hình seed data từ thư mục Seeds
             modelBuilder.ApplyConfiguration(new MonHocSeed());
             modelBuilder.ApplyConfiguration(new LopHocPhanSeed());
+            modelBuilder.ApplyConfiguration(new NguoiDungSeed());
         }
     }
 }

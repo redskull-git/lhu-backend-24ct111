@@ -338,6 +338,70 @@ namespace LHU_MaSV_NguyenVanTi.Api.Migrations
                         });
                 });
 
+            modelBuilder.Entity("LHU_MaSV_NguyenVanTi.Api.Database.Entities.NguoiDungEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("GiangVienId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MatKhauHash")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int?>("SinhVienId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenDangNhap")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("VaiTro")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SinhVienId");
+
+                    b.HasIndex("TenDangNhap")
+                        .IsUnique();
+
+                    b.ToTable("NguoiDung");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            MatKhauHash = "$2a$11$ToDL5Apm.cdz0RUOZggDkenlORElj.PA6qx1gZ7G5Yj5XQdhNml46",
+                            TenDangNhap = "daotao",
+                            VaiTro = "DaoTao"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            GiangVienId = 1,
+                            MatKhauHash = "$2a$11$ToDL5Apm.cdz0RUOZggDkenlORElj.PA6qx1gZ7G5Yj5XQdhNml46",
+                            TenDangNhap = "giangvien",
+                            VaiTro = "GiangVien"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            MatKhauHash = "$2a$11$ToDL5Apm.cdz0RUOZggDkenlORElj.PA6qx1gZ7G5Yj5XQdhNml46",
+                            SinhVienId = 1,
+                            TenDangNhap = "sinhvien",
+                            VaiTro = "SinhVien"
+                        });
+                });
+
             modelBuilder.Entity("LHU_MaSV_NguyenVanTi.Api.Database.Entities.SinhVienEntity", b =>
                 {
                     b.Property<int>("SinhVienId")
@@ -401,6 +465,15 @@ namespace LHU_MaSV_NguyenVanTi.Api.Migrations
                         .IsRequired();
 
                     b.Navigation("MonHoc");
+                });
+
+            modelBuilder.Entity("LHU_MaSV_NguyenVanTi.Api.Database.Entities.NguoiDungEntity", b =>
+                {
+                    b.HasOne("LHU_MaSV_NguyenVanTi.Api.Database.Entities.SinhVienEntity", "SinhVien")
+                        .WithMany()
+                        .HasForeignKey("SinhVienId");
+
+                    b.Navigation("SinhVien");
                 });
 
             modelBuilder.Entity("LHU_MaSV_NguyenVanTi.Api.Database.Entities.LopHocPhanEntity", b =>
