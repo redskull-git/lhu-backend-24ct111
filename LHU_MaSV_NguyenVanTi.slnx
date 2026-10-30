@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="LHU_MaSV_NguyenVanTi.Api/LHU_MaSV_NguyenVanTi.Api.csproj" />
+  <Project Path="WebApplication1/WebApplication1.csproj" Id="f53fdc13-6b71-439f-aa34-6d2c2c4313ce" />
 </Solution>
